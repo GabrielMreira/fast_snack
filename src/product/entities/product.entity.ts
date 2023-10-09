@@ -1,7 +1,9 @@
+import { ProductOrder } from 'src/orders/entities/products-order.entity';
 import {
   BaseEntity,
   Column,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm';
@@ -26,4 +28,7 @@ export class Product extends BaseEntity {
 
   @Column({ nullable: false, type: 'bigint' })
   statusId: number;
+
+  // @OneToMany(() => ProductOrder, (productOrder) => productOrder.produto)
+  // pedido_produto: Product[];
 }

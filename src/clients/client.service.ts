@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateClientDto } from './dto/create-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Client } from './entities/client.entitie';
+import { Client } from './entities/client.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()

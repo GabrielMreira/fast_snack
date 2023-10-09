@@ -5,11 +5,15 @@ import { ProductModule } from './product/product.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmConfig } from './configs/config.db';
 import { ClientModule } from './clients/client.module';
-import { KitchenModule } from './kitchen/kitchen.module';
 import { OrdersModule } from './orders/orders.module';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(typeOrmConfig), ProductModule, ClientModule, KitchenModule, OrdersModule],
+  imports: [
+    TypeOrmModule.forRoot(typeOrmConfig),
+    OrdersModule,
+    ClientModule,
+    ProductModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
