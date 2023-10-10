@@ -18,9 +18,9 @@ export class ProductOrder extends BaseEntity{
 
     @ManyToOne(() => Orders, (orders) => orders.pedido_produto)
     @JoinColumn()
-    pedido: number;
+    pedido: Orders;
 
     @ManyToOne(() => Product, (product) => product.pedido_produto)
-    produto;
+    produto: Product;
     
 }

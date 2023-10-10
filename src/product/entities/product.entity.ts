@@ -30,5 +30,5 @@ export class Product extends BaseEntity {
   statusId: number;
 
   @OneToMany(() => ProductOrder, (productOrder) => productOrder.produto)
-  pedido_produto: Product[];
+  pedido_produto: Product;
 }
