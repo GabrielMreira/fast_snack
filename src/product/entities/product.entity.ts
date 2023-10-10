@@ -29,6 +29,6 @@ export class Product extends BaseEntity {
   @Column({ nullable: false, type: 'bigint' })
   statusId: number;
 
-  // @OneToMany(() => ProductOrder, (productOrder) => productOrder.produto)
-  // pedido_produto: Product[];
+  @OneToMany(() => ProductOrder, (productOrder) => productOrder.produto)
+  pedido_produto: Product[];
 }
