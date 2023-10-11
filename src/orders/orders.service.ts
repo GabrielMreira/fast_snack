@@ -19,11 +19,15 @@ export class OrdersService {
 
     async createProductOrder(createProductOrderDto: CreateProductOrderDto){
         const order = await this.orderRepository.findOneBy({ id: createProductOrderDto.pedido.id })
+        const products = createProductOrderDto.produto;
 
         if(!order)
             throw new NotFoundException('Pedido não encontrado');
 
-        createProductOrderDto.produto.forEach((produto) => {
+        if(!products)
+            throw new NotFoundException('Produtos não encontrados')
+
+        products.forEach((produto) => {
             this.productOrderRepository.createQueryBuilder()
             .insert()
             .into(ProductOrder)
@@ -33,5 +37,6 @@ export class OrdersService {
             })
             .execute();
         })
+        
 }
 }
