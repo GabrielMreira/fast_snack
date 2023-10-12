@@ -38,5 +38,26 @@ export class OrdersService {
             .execute();
         })
         
-}
+    }
+
+    findAll() {
+        return this.orderRepository.find();
+    }
+
+    findById(id: number){
+        return this.orderRepository.findOneBy({ id })
+    }
+
+    findProductsByOrder(id: number) {
+        const productOrder = this.productOrderRepository
+        .createQueryBuilder('ProductOrder')
+        .leftJoinAndSelect('ProductOrder.produto', 'Product')
+        .where('ProductOrder.pedido.id = :id', { id })
+        .getMany();
+
+        if(!productOrder)
+            throw new NotFoundException('Nenhum produdo nesse pedido');
+
+        return productOrder;
+    }
 }
