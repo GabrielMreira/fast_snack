@@ -20,6 +20,7 @@ export class OrdersService {
     async createProductOrder(createProductOrderDto: CreateProductOrderDto){
         const order = await this.orderRepository.findOneBy({ id: createProductOrderDto.pedido.id })
         const products = createProductOrderDto.produto;
+        let valorTotal: number;
 
         if(!order)
             throw new NotFoundException('Pedido não encontrado');
@@ -37,11 +38,34 @@ export class OrdersService {
             })
             .execute();
         })
-        
+        //Resolver o por que do valor total não funcionar
+        this.orderRepository
+        .createQueryBuilder()
+        .update(Orders)
+        .set({total_pedido: valorTotal})
+        .where('id = :id', { id:order.id })
     }
 
     findAll() {
-        return this.orderRepository.find();
+        return this.orderRepository.createQueryBuilder('orders').orderBy('orders.pedido_criado');
+    }
+
+    async processOrder(id: number ,pedidoAceito: boolean){
+        const order: Orders = await this.orderRepository.findOneBy({id});
+        if(!order){
+            throw new NotFoundException('Nenhum pedido encontrado')
+        }
+ 
+        let processado = true
+        if(!pedidoAceito)
+            processado = false;
+
+        this.orderRepository
+        .createQueryBuilder()
+        .update(Orders)
+        .set({ processado })
+        .where('id = :id', { id })
+        .execute();
     }
 
     findById(id: number){

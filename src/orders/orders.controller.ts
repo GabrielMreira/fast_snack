@@ -4,8 +4,8 @@ import {
   Post,
   Get,
   Patch,
-  Delete,
   Param,
+  Query,
 } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
@@ -30,13 +30,18 @@ export class OrdersController {
     return this.ordersService.findAll();
   }
 
+  @Patch('cozinha/:id/aceitarpedido?')
+  updateOrder(@Param('id') id: string, @Query('aceito') pedidoAceito: boolean) {
+    return this.ordersService.processOrder(+id, pedidoAceito);
+  }
+
   @Get('cozinha/:id')
   findById(@Param('id') id: string) {
     return this.ordersService.findById(+id);
   }
 
   @Get('cozinha/pedido/:id')
-  findProductsByOrder(@Param('id') id: string){
+  findProductsByOrder(@Param('id') id: string) {
     return this.ordersService.findProductsByOrder(+id);
   }
 }

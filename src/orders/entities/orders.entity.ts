@@ -8,7 +8,8 @@ import {
     Unique,
     OneToMany,
     OneToOne,
-    JoinColumn
+    JoinColumn,
+    CreateDateColumn
 } from 'typeorm';
 import { ProductOrder } from './products-order.entity';
 import { Client } from 'src/clients/entities/client.entity';
@@ -31,4 +32,12 @@ export class Orders extends BaseEntity {
     @JoinColumn()
     cliente: Client
 
+    @Column({nullable: true})
+    processado: boolean
+
+    @Column({type: 'double precision', nullable: true})
+    total_pedido: number;
+
+    @CreateDateColumn()
+    pedido_criado: Date
 }
