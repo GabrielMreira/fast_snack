@@ -7,9 +7,9 @@ import {
     Entity,
     Unique,
     OneToMany,
-    OneToOne,
     JoinColumn,
-    CreateDateColumn
+    CreateDateColumn,
+    ManyToOne
 } from 'typeorm';
 import { ProductOrder } from './products-order.entity';
 import { Client } from 'src/clients/entities/client.entity';
@@ -28,7 +28,7 @@ export class Orders extends BaseEntity {
     @JoinColumn()
     pedido_produto: ProductOrder
 
-    @OneToOne(() => Client)
+    @ManyToOne(() => Client, (client) => client.orders)
     @JoinColumn()
     cliente: Client
 

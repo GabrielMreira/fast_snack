@@ -20,7 +20,6 @@ export class OrdersService {
     async createProductOrder(createProductOrderDto: CreateProductOrderDto){
         const order = await this.orderRepository.findOneBy({ id: createProductOrderDto.pedido.id })
         const products = createProductOrderDto.produto;
-        let valorTotal: number;
 
         if(!order)
             throw new NotFoundException('Pedido não encontrado');
@@ -38,16 +37,22 @@ export class OrdersService {
             })
             .execute();
         })
-        //Resolver o por que do valor total não funcionar
+
+        const valortotal = products.map((product) => product.preco).reduce((accumulator, current) => {return accumulator + current});
+
         this.orderRepository
         .createQueryBuilder()
         .update(Orders)
-        .set({total_pedido: valorTotal})
+        .set({total_pedido: valortotal})
         .where('id = :id', { id:order.id })
+        .execute();
     }
 
     findAll() {
-        return this.orderRepository.createQueryBuilder('orders').orderBy('orders.pedido_criado');
+        return this.orderRepository.createQueryBuilder('orders')
+        .innerJoinAndSelect('orders.cliente', 'client')
+        .orderBy('orders.pedido_criado')
+        .getMany();
     }
 
     async processOrder(id: number ,pedidoAceito: boolean){
@@ -56,10 +61,8 @@ export class OrdersService {
             throw new NotFoundException('Nenhum pedido encontrado')
         }
  
-        let processado = true
-        if(!pedidoAceito)
-            processado = false;
-
+        const processado = (pedidoAceito as unknown as string) == 'true'  ? true : false;
+        
         this.orderRepository
         .createQueryBuilder()
         .update(Orders)
@@ -69,7 +72,10 @@ export class OrdersService {
     }
 
     findById(id: number){
-        return this.orderRepository.findOneBy({ id })
+        return this.orderRepository.createQueryBuilder('orders')
+        .innerJoinAndSelect('orders.cliente', 'client')
+        .where('orders.id = :id', { id })
+        .getOne();
     }
 
     findProductsByOrder(id: number) {

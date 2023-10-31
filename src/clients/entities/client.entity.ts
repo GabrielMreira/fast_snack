@@ -7,7 +7,7 @@ import {
     Generated,
     Entity,
     Unique,
-    OneToOne,
+    OneToMany,
 } from 'typeorm';
 
 @Entity()
@@ -29,6 +29,6 @@ export class Client extends BaseEntity{
     @Column({ nullable: true, type: 'varchar' })
     telefone: string;
 
-    @OneToOne(() => Orders, (orders) => orders.cliente)
+    @OneToMany(() => Orders, (orders) => orders.cliente)
     orders: Orders
 }
