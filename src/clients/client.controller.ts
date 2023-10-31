@@ -23,6 +23,11 @@ export class ClientController {
     return this.clientService.findOne(+id);
   }
 
+  @Get(':name')
+  findOneByName(@Param('name') name: string) {
+    return this.clientService.findOneByName(name);
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateClientDto: UpdateClientDto) {
     return this.clientService.update(+id, updateClientDto);

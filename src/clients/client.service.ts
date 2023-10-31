@@ -35,4 +35,8 @@ export class ClientService {
         this.clientRepository.remove(client);
         return client;
     }
+
+    async findOneByName(name: string): Promise<Client>{
+        return this.clientRepository.findOneBy({nome: name})
+    }
 }
