@@ -7,10 +7,13 @@ import { Repository } from 'typeorm';
 import { ForbiddenException, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { LoginUserDTO } from './dto/login-user.dto';
+import { ReturnUserDTO } from './dto/return-user.dto';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService{
-    constructor(@InjectRepository(Users) private readonly userRepository: Repository<Users>){}
+    constructor(@InjectRepository(Users) private readonly userRepository: Repository<Users>,
+    private readonly jwtService: JwtService){}
 
     async sigIn(createUserDTO: CreateUserDTO){
         const client = await this.findOneByLogIn(createUserDTO.login);
@@ -33,10 +36,16 @@ export class AuthService{
             throw new NotFoundException('Usuário não cadastrado');
 
         if(!await bcrypt.compare(loginUserDTO.senha, user.senha))
-            throw new UnauthorizedException('Login ou senha incorretos');
+            throw new UnauthorizedException('Senha incorretos');
         
         delete(user.senha);
-        return user;
+        delete(user.id);
+
+        const returnUser: ReturnUserDTO = user;
+        const payload = {username: user.nome , userrole: user.cargo};
+        returnUser.token = await this.jwtService.signAsync(payload);
+
+        return returnUser;
     }
     
     findOneByLogIn(logIn: string){
