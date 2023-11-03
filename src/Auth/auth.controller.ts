@@ -1,15 +1,23 @@
 /* eslint-disable prettier/prettier */
-import { Controller } from '@nestjs/common';
+import { Controller, Post, Body, Get } from '@nestjs/common';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { LoginUserDTO } from './dto/login-user.dto';
 import { UpdateUserDTO } from './dto/update-user.dto';
-import { ForbiddenException } from '@nestjs/common';
+import { AuthService } from './auth.service';
 
 @Controller('auth')
 export class AuthController {
-    sigIn(createUserDTO: CreateUserDTO){}    
+    constructor(private readonly authService: AuthService){}
 
-    logIn(loginUserDTO: LoginUserDTO){}
+    @Post('sigin')
+    sigIn(@Body() createUserDTO: CreateUserDTO){
+        this.authService.sigIn(createUserDTO);
+    }    
+
+    @Get('login')
+    logIn(@Body() loginUserDTO: LoginUserDTO){
+        return this.authService.logIn(loginUserDTO);
+    }
 
     updateUser(updateUserDTO: UpdateUserDTO){}
 }
