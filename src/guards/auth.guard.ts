@@ -1,21 +1,33 @@
 /* eslint-disable prettier/prettier */
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
-import { Observable } from 'rxjs';
+import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { JwtSecret } from 'src/consts/consts';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  canActivate(
-    context: ExecutionContext,
-  ): boolean | Promise<boolean> | Observable<boolean> {
-    const request = context.switchToHttp().getRequest();
+    constructor(private readonly jwtService: JwtService){}
 
-    console.log(request.headers.authorization);  
-    //Finalizar o guard pra jwt
-    return true;
+    async canActivate(
+        context: ExecutionContext,
+    ):  Promise<boolean> {
+        const request = context.switchToHttp().getRequest();
+        if(!request.headers.authorization)
+            throw new UnauthorizedException('Token não enviado');
+
+        const token = this.extractToken(request.headers.authorization);
+        try {
+            const payload = await this.jwtService.verifyAsync(token, { secret: JwtSecret.SECRET })
+        } catch (error) {
+            throw new UnauthorizedException('Token não verificado')   
+        }
+
+        return true;
   }
 
-  extractToken(request): string | undefined{
-    const [type, token] = request.headers.Authorization.split(' ') ?? [];
+  extractToken(authorization: string): string | undefined{
+    const [type, token] = authorization.split(' ') ?? [];
     return type === 'Bearer' ? token : undefined;
   }
 }
+
+//Criar uma guard para administrar as roles de acesso

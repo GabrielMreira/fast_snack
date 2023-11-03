@@ -4,7 +4,6 @@ import { CreateUserDTO } from './dto/create-user.dto';
 import { LoginUserDTO } from './dto/login-user.dto';
 import { UpdateUserDTO } from './dto/update-user.dto';
 import { AuthService } from './auth.service';
-import { AuthGuard } from 'src/guards/auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -15,7 +14,6 @@ export class AuthController {
         this.authService.sigIn(createUserDTO);
     }    
 
-    @UseGuards(AuthGuard)
     @Get('login')
     logIn(@Body() loginUserDTO: LoginUserDTO){
         return this.authService.logIn(loginUserDTO);
