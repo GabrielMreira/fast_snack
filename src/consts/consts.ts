@@ -1,1 +1,1 @@
-export const JwtSecret = { SECRET: 'mudardepoisessacaceta' };
+export const JwtSecret = { SECRET:process.env.JWT_ADM_SECRET };

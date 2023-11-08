@@ -45,6 +45,9 @@ export class AuthService{
         const payload = {username: user.nome , userrole: user.cargo};
         returnUser.token = await this.jwtService.signAsync(payload);
 
+        //Depois tentar resolver o .env
+        //A verificação por token sera com base no token padrão mais o cargo
+
         return returnUser;
     }
     
