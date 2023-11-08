@@ -9,6 +9,7 @@ import * as bcrypt from 'bcrypt';
 import { LoginUserDTO } from './dto/login-user.dto';
 import { ReturnUserDTO } from './dto/return-user.dto';
 import { JwtService } from '@nestjs/jwt';
+import { JwtSecret } from 'src/consts/consts';
 
 @Injectable()
 export class AuthService{
@@ -43,10 +44,7 @@ export class AuthService{
 
         const returnUser: ReturnUserDTO = user;
         const payload = {username: user.nome , userrole: user.cargo};
-        returnUser.token = await this.jwtService.signAsync(payload);
-
-        //Depois tentar resolver o .env
-        //A verificação por token sera com base no token padrão mais o cargo
+        returnUser.token = await this.jwtService.signAsync(payload, { secret: JwtSecret.SECRET + user.cargo });
 
         return returnUser;
     }

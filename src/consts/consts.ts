@@ -1,1 +1,3 @@
-export const JwtSecret = { SECRET:process.env.JWT_ADM_SECRET };
+export const JwtSecret = { 
+  SECRET: 'secretpadraomudardepois',
+ };

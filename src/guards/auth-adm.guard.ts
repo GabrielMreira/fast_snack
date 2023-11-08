@@ -2,9 +2,10 @@
 import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { JwtSecret } from 'src/consts/consts';
+import { UserRole } from 'src/enums/user-role.enum';
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class AuthADMGuard implements CanActivate {
     constructor(private readonly jwtService: JwtService){}
 
     async canActivate(
@@ -14,10 +15,9 @@ export class AuthGuard implements CanActivate {
         if(!request.headers.authorization)
             throw new UnauthorizedException('Token não enviado');
 
-        console.log(JwtSecret.SECRET)
         const token = this.extractToken(request.headers.authorization);
         try {
-            const payload = await this.jwtService.verifyAsync(token, { secret: JwtSecret.SECRET })
+            const payload = await this.jwtService.verifyAsync(token, { secret: JwtSecret.SECRET + UserRole.ADMINISTRADOR })
         } catch (error) {
             throw new UnauthorizedException('Token não verificado')   
         }
