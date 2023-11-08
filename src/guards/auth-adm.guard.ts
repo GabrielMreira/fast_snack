@@ -3,13 +3,14 @@ import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from
 import { JwtService } from '@nestjs/jwt';
 import { JwtSecret } from 'src/consts/consts';
 import { UserRole } from 'src/enums/user-role.enum';
+import { AuthGuard } from 'src/interfaces/Auth-Guard.interface';
 
 @Injectable()
-export class AuthADMGuard implements CanActivate {
+export class AuthADMGuard implements AuthGuard {
     constructor(private readonly jwtService: JwtService){}
 
     async canActivate(
-        context: ExecutionContext,
+        context: ExecutionContext
     ):  Promise<boolean> {
         const request = context.switchToHttp().getRequest();
         if(!request.headers.authorization)
@@ -30,5 +31,3 @@ export class AuthADMGuard implements CanActivate {
     return type === 'Bearer' ? token : undefined;
   }
 }
-
-//Criar uma guard para administrar as roles de acesso
