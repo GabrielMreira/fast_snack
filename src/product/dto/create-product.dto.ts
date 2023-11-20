@@ -5,8 +5,9 @@ import {
 	IsNumber,
 	MaxLength,
 } from 'class-validator';
+import { BaseProductDTO } from './base-product.dto';
 
-export class CreateProductDto {
+export class CreateProductDto extends BaseProductDTO {
 	@IsNotEmpty({ message: 'Insira um codigo para o produto' })
 	@IsNumber()
 	codigo: string;
