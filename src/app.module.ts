@@ -8,6 +8,7 @@ import { ClientModule } from './clients/client.module';
 import { OrdersModule } from './orders/orders.module';
 import { AuthModule } from './Auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
+import { ComboModule } from './combo/combo.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { ConfigModule } from '@nestjs/config';
     ClientModule,
     ProductModule,
     AuthModule,
+    ComboModule,
   ],
   controllers: [AppController],
   providers: [AppService],

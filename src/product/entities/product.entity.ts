@@ -1,3 +1,4 @@
+import { Combo } from 'src/combo/entities/combo.entity';
 import { ProductOrder } from 'src/orders/entities/products-order.entity';
 import {
 	BaseEntity,
@@ -31,4 +32,7 @@ export class Product extends BaseEntity {
 
 	@OneToMany(() => ProductOrder, (productOrder) => productOrder.produto)
 	pedido_produto: Product;
+
+	// @OneToMany(() => Combo)
+	// combo_produto: Product;
 }

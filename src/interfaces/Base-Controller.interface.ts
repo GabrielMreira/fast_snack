@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { BaseProductDTO } from '../product/dto/base-product.dto';
 
 export interface BaseController<T extends BaseProductDTO> {
